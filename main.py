@@ -10,7 +10,7 @@ df = pd.read_csv("scr/movies_dataset_ETL_toAPI.csv")
 #http://127.0.0.1:8000
 @app.get("/")
 def index():
-    return "https://elrafas-proyecto1.onrender.com/docs"
+    return "https://elrafas-pi01-ml-ops.onrender.com/docs"
 
 @app.get('/cantidad_filmaciones_mes/{mes}')
 def cantidad_filmaciones_mes(mes:str):
@@ -36,7 +36,7 @@ def cantidad_filmaciones_mes(mes:str):
 
     count = df[df['release_month'] == m_dict[mes]].shape[0]
     
-    return {"mes":mes, "cantidad_filmaciones":count}
+    return {"mes":str(mes), "cantidad_filmaciones":int(count)}
 
 
 @app.get('/cantidad_filmaciones_dia{dia}')
@@ -54,13 +54,13 @@ def cantidad_filmaciones_dia(dia:str):
         'domingo': 6,
         }
     
-    df['release_date'] = pd.to_datetime(df['release_date'], format='%Y-%m-%d', errors='coerce')
+    #df['release_date'] = pd.to_datetime(df['release_date'], format='%Y-%m-%d', errors='coerce')
 
     dff = df[df['status'] == 'Released']
 
     count = dff[dff['release_weekday'] == d_dict[dia]].shape[0]
     
-    return {"dia":dia, "cantidad_filmaciones": count}
+    return {"dia":str(dia), "cantidad_filmaciones": str(count)}
 
 
 
@@ -96,7 +96,7 @@ def votos_titulo(titulo:str):
     year = dff['anio'].iloc[0]
     
     if count >= 2000:
-        return {"titulo":str(titulo), 'anio':int(year), "voto_total":count,"voto_promedio":avg}
+        return {"titulo":str(titulo), 'anio':int(year), "voto_total":int(count),"voto_promedio":int(avg)}
     else:
         return {"titulo":str(titulo), 'mensaje': 'No es posible un resultado ya que el título seleccionado tiene pocas valoraciones.'}
 
@@ -114,7 +114,7 @@ def get_actor(nombre_actor:str):
     retorno_tot = dff['return'].sum()
     retorno_prom = dff['return'].mean()
 
-    return {"actor": str(nombre_actor), "cantidad_filmaciones": count,"retorno_total": retorno_tot, 'retorno_promedio': retorno_prom}
+    return {"actor": str(nombre_actor), "cantidad_filmaciones": int(count),"retorno_total": int(retorno_tot), 'retorno_promedio': int(retorno_prom)}
 
 @app.get('/get_director/{nombre_director}')
 def get_director(nombre_director:str):
@@ -140,9 +140,11 @@ def get_director(nombre_director:str):
         dic['revenue'] = str(dff['revenue'].iloc[i])
         peliculas.append(dic)
 
+    
+
     #return {"director":str(nombre_director), "retorno_promedio_por_filmacion":str(retorno),"peliculas":peliculas}
 
-    return {'director':str(nombre_director), 'retorno_total_director':retorno, 
+    return {'director':str(nombre_director), 'retorno_total_director':int(retorno), 
     'peliculas':dff['title'].tolist(), 'anio':dff['release_year'].tolist(), 'retorno_pelicula':dff['return'].tolist(), 
     'budget_pelicula':dff['budget'].tolist(), 'revenue_pelicula':dff['revenue'].tolist()}
 
