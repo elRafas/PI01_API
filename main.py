@@ -180,7 +180,7 @@ def recomendacion(titulo:str):
 
     data["tags"] = data["tags"].apply(stem)
     
-    cv = CountVectorizer(max_features=1500, stop_words="english")
+    cv = CountVectorizer(max_features=1000, stop_words="english")
     vectors = cv.fit_transform(data["tags"]).toarray()
 
     similares = cosine_similarity(vectors)
