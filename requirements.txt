@@ -1,9 +1,7 @@
-pip
 numpy
 pandas
 uvicorn
 fastapi
 
-re
 nltk
 sklearn
