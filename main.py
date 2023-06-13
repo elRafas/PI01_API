@@ -39,7 +39,7 @@ def cantidad_filmaciones_mes(mes:str):
     return {"mes":str(mes), "cantidad_filmaciones":int(count)}
 
 
-@app.get('/cantidad_filmaciones_dia{dia}')
+@app.get('/cantidad_filmaciones_dia/{dia}')
 def cantidad_filmaciones_dia(dia:str):
     '''Se ingresa el dia y la funcion retorna la cantidad de peliculas que se estrenaron ese dia historicamente'''
 
@@ -58,7 +58,7 @@ def cantidad_filmaciones_dia(dia:str):
 
     dff = df[df['status'] == 'Released']
 
-    count = dff[dff['release_weekday'] == d_dict[dia]].shape[0]
+    count = dff.loc[dff['release_weekday'] == d_dict[dia]].shape[0]
     
     return {"dia":str(dia), "cantidad_filmaciones": str(count)}
 
